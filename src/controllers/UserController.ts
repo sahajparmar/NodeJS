@@ -1,33 +1,32 @@
 import User from "../models/User";
+import { validationResult } from 'express-validator';
 
 export class UserController {
-  static login(req, res, next) {
-    // const data = [{ name: "technys" }];
-    // res.status(200).send(data);
-
-    // (req as any).errorStatus = 422;
-    // const error = new Error('User email or password does not match');
-    // next(error);
-
-    // res.send(req.body);
-
+  static signup(req, res, next) {
+    
+    const errors = validationResult(req);
+    const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+      
+        // const user = new User({
+    //   email,
+    //   password,
+    // });
 
-    const user = new User({
-      email,
-      password,
-    });
-
-    user
-      .save()
-      .then((user) => {
-        res.send(user);
-      })
-      .catch((e) => {
-        next(e);
-      });
+    // user
+    //   .save()
+    //   .then((user) => {
+    //     res.send(user);
+    //   })
+    //   .catch((e) => {
+    //     next(e);
+    //   });
   }
+
   static test1(req, res, next) {
     console.log("test");
     (req as any).msg = "this is test";
