@@ -1,44 +1,134 @@
 import User from "../models/User";
-import { validationResult } from "express-validator";
+import { NodeMailer } from "../utils/NodeMailer";
+import { Utils } from "../utils/Utils";
 
 export class UserController {
-  static signup(req, res, next) {
-    const errors = validationResult(req);
-    const name = req.body.name;
-    const phone = req.body.phone;
+  static async signup(req, res, next) {
+    console.log("req: ", req);
     const email = req.body.email;
+    const phone = req.body.phone;
     const password = req.body.password;
+    const name = req.body.name;
     const type = req.body.type;
     const status = req.body.status;
-    if (!errors.isEmpty()) {
-      next(new Error(errors.array()[0].msg));
-    }
-    const data = {
-      email,
-      phone,
-      password,
-      name,
-      type,
-      status
-    };
-    let user = new User(data);
+    const verification_token = Utils.generateVerificationToken();
+    try {
+      const hash = await Utils.encryptPassword(password);
+      const data = {
+        email,
+        verification_token,
+        verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME,
+        phone,
+        password: hash,
+        name,
+        type,
+        status,
+      };
+      let user = await new User(data).save();
+      const payload = {
+        user_id: user._id,
+        email: user.email,
+      };
 
-    user
-      .save()
-      .then((user) => {
-        res.send(user);
-      })
-      .catch((e) => {
-        next(e);
+      const token = Utils.jwtSign(payload);
+
+      res.json({
+        token: token,
+        user: user,
       });
-  }
 
-  // static test1(req, res, next) {
-  //   console.log("test");
-  //   (req as any).msg = "this is test";
-  //   next();
+      // send email to user for verification
+      await NodeMailer.sendMail({
+        to: [user.email],
+        subject: "Email Verification",
+        html: `<h1>Your Otp is ${verification_token}</h1>`,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+  static async verify(req, res, next) {
+    const verification_token = req.body.verification_token;
+    const email = req.body.email;
+    try {
+      const user = await User.findOneAndUpdate(
+        {
+          email: email,
+          verification_token: verification_token,
+          verification_token_time: { $gt: Date.now() },
+        },
+        {
+          email_verified: true,
+        },
+        {
+          new: true,
+        }
+      );
+      if (user) {
+        res.send(user);
+      } else {
+        throw new Error(
+          "Email Verification Token Is Expired. Please try again..."
+        );
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
+  static async resendVerificationEmail(req, res, next) {
+    const email = req.query.email;
+    const verification_token = Utils.generateVerificationToken();
+    try {
+      const user = await User.findOneAndUpdate(
+        {
+          email: email,
+        },
+        {
+          verification_token: verification_token,
+          verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME,
+        }
+      );
+      if (user) {
+        await NodeMailer.sendMail({
+          to: [user.email],
+          subject: "Resend Email Verification",
+          html: `<h1>Your Otp is ${verification_token}</h1>`,
+        });
+        res.json({ success: true });
+      } else {
+        throw new Error("User doesn't exist");
+      }
+    } catch (e) {
+      next(e);
+    }
+  }
+  // static async resendVerificationEmail(req, res, next) {
+  //   try {
+  //   } catch (e) {
+  //     next(e);
+  //   }
   // }
-  // static test2(req, res) {
-  //   res.send((req as any).msg);
-  // }
+  static async login(req, res, next) {
+    const user = req.user;
+    const password = req.query.password;
+    const data = {
+      password,
+      encrypt_password: user.password,
+    };
+    try {
+      await Utils.comparePassword(data);
+      const payload = {
+        user_id: user._id,
+        email: user.email,
+      };
+
+      const token = Utils.jwtSign(payload);
+      res.json({
+        token: token,
+        user: user,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
