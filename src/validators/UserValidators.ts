@@ -4,7 +4,8 @@ import User from "../models/User";
 export class UserValidators {
   static signup() {
     return [
-      body("email", "Email is required").isEmail()
+      body("email", "Email is required")
+        .isEmail()
         .custom((email, { req }) => {
           return User.findOne({
             email: email, // type: 'user'
@@ -34,17 +35,17 @@ export class UserValidators {
 
   static verifyUserEmail() {
     return [
-      body("verification_token", "Email verification token  is required").isNumeric(),
-      body("email", "Email is required").isEmail(),
+      body(
+        "verification_token",
+        "Email verification token  is required"
+      ).isNumeric(),
     ];
-  }
-  static verifyUserForResendEmail(){
-    return [query('email', 'Email is required').isEmail()];
   }
 
   static login() {
     return [
-      query("email", "Email is required").isEmail()
+      body("email", "Email is required")
+        .isEmail()
         .custom((email, { req }) => {
           return User.findOne({
             email: email, // type: 'user'
@@ -55,16 +56,14 @@ export class UserValidators {
                 return true;
               } else {
                 // throw new Error("No User Register with such Email");
-                throw ("No User Register with such Email");
+                throw "No User Register with such Email";
               }
             })
             .catch((e) => {
               throw new Error(e);
             });
         }),
-      query("password", "Password is required")
-        .isAlphanumeric()
+      body("password", "Password is required").isAlphanumeric(),
     ];
   }
-
 }

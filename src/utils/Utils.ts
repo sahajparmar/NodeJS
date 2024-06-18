@@ -1,7 +1,4 @@
 import * as Bcrypt from "bcrypt";
-import { getEnvironmentVariables } from "../environments/environments";
-import * as jwt from "jsonwebtoken";
-
 
 export class Utils {
   public MAX_TOKEN_TIME = 5 * 60 * 1000;
@@ -25,24 +22,21 @@ export class Utils {
       });
     });
   }
-  static comparePassword(data: { password: string, encrypt_password: string}): Promise<any> {
+  static comparePassword(data: {
+    password: string;
+    encrypt_password: string;
+  }): Promise<any> {
     return new Promise((resolve, reject) => {
-      Bcrypt.compare,(data.password, data.encrypt_password, (err, same) => {
+      Bcrypt.compare(data.password, data.encrypt_password, (err, same) => {
         if (err) {
           reject(err);
-        }else if (!same){  // if not match(password and encrypted password)
-          reject(new Error(' User & Password Does\'t Match'));
+        } else if (!same) {
+          // if not match(password and encrypted password)
+          reject(new Error(" User & Password Does't Match"));
         } else {
           resolve(true);
         }
       });
     });
-  }
-
-  static jwtSign(payload, expired_In: string = '180d') {
-    return jwt.sign(payload, 
-      getEnvironmentVariables().jwt_secret_key, {
-      expiresIn: expired_In}
-    );
   }
 }

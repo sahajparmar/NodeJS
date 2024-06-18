@@ -15,8 +15,8 @@ class UserRouter {
     this.deleteRoutes();
   }
   getRoutes() {
-    this.router.get('/send/verification/email', UserValidators.verifyUserForResendEmail(),GlobalMiddleware.checkError, UserController.resendVerificationEmail);
-    this.router.get('/login', UserValidators.login(),GlobalMiddleware.checkError, UserController.login);
+    this.router.get('/send/verification/email', GlobalMiddleware.auth, UserController.resendVerificationEmail);
+    this.router.post('/login', UserValidators.login(),GlobalMiddleware.checkError, UserController.login);
   }
 
   postRoutes() {
