@@ -3,9 +3,9 @@ import * as jwt from "jsonwebtoken";
 
 export class Jwt {
 
- static jwtSign(payload, expired_In: string = "180d") {
+ static jwtSign(payload, expires_in: string = "180d") {
     return jwt.sign(payload, getEnvironmentVariables().jwt_secret_key, {
-      expiresIn: expired_In,
+      expiresIn: expires_in,
     });
   }
   static jwtVerify(token: string): Promise<any> {
