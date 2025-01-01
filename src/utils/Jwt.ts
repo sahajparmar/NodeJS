@@ -5,7 +5,7 @@ export class Jwt {
 
  static jwtSign(payload, expires_in: string = "180d") {
     return jwt.sign(payload, getEnvironmentVariables().jwt_secret_key, {
-      expiresIn: expires_in,
+      expiresIn: expires_in, issuer: 'technyks.com'
     });
   }
   static jwtVerify(token: string): Promise<any> {
