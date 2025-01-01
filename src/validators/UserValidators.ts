@@ -5,8 +5,7 @@ import bodyParser = require("body-parser");
 export class UserValidators {
   static signup() {
     return [
-      body("email", "Email is required")
-        .isEmail()
+      body("email", "Email is required").isEmail()
         .custom((email, { req }) => {
           return User.findOne({
             email: email, // type: 'user'
@@ -93,7 +92,7 @@ export class UserValidators {
   static verifyResetPasswordToken() {
     return [
       query("email", "Email is required").isEmail(),
-      query("reset_password_token", "Reset password token  is required")
+      query("reset_passwordn_token", "Reset password token  is required")
         .isNumeric()
         .custom((reset_password_token, { req }) => {
           return User.findOne({

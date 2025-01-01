@@ -2,10 +2,11 @@ import User from "../models/User";
 import { Jwt } from "../utils/Jwt";
 import { NodeMailer } from "../utils/NodeMailer";
 import { Utils } from "../utils/Utils";
+import { Request, Response, NextFunction } from "express";
 
 export class UserController {
   static async signup(req, res, next) {
-    console.log("req: ", req);
+    // console.log("req: ", req);
     const email = req.body.email;
     const phone = req.body.phone;
     const password = req.body.password;
@@ -140,7 +141,11 @@ export class UserController {
       next(e);
     }
   }
-  static async sendResetPasswordOTP(req, res, next) {
+  static async sendResetPasswordOTP(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     const email = req.query.email;
     const reset_password_token = Utils.generateVerificationToken();
     try {
@@ -231,12 +236,12 @@ export class UserController {
     const verification_token = Utils.generateVerificationToken();
     try {
       const userData = await User.findById(user.aud);
-      if (!userData) throw new Error("User doesn\'t exist");
+      if (!userData) throw new Error("User doesn't exist");
       await Utils.comparePassword,
-        ({
+        {
           password: plain_password,
           encrypt_password: userData.password,
-        });
+        };
       const updatedUser = await User.findByIdAndUpdate(
         user.aud,
         {
@@ -245,7 +250,7 @@ export class UserController {
           email_verified: false,
           verification_token,
           verification_token_time: Date.now() + new Utils().MAX_TOKEN_TIME,
-          updated_at: new Date()
+          updated_at: new Date(),
         },
 
         { new: true }

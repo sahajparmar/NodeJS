@@ -8,11 +8,11 @@ class UserRouter {
 
   constructor() {
     this.router = Router();
-    this.getRoutes();
-    this.postRoutes();
-    this.patchRoutes();
-    this.putRoutes();
-    this.deleteRoutes();
+    this.getRoutes();  // read data from server.
+    this.postRoutes(); // add some data to server.
+    this.patchRoutes(); // partially update an existing resource.
+    this.putRoutes(); // update an existing resource or cerate it if doesn't exist.
+    this.deleteRoutes(); // delete data from server.
   }
   getRoutes() {
     this.router.get(
