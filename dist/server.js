@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const environments_1 = require("./environments/environments");
 const UserRouter_1 = require("./routers/UserRouter");
 const bodyParser = require("body-parser");
+const cors = require("cors");
+const BannerRouter_1 = require("./routers/BannerRouter");
 class Server {
     constructor() {
         // create a class
@@ -17,6 +19,7 @@ class Server {
     }
     setConfigs() {
         this.connectMongoDB(); // conecting MongoDB database
+        this.allowCors();
         this.configureBodyParser();
     }
     connectMongoDB() {
@@ -29,8 +32,13 @@ class Server {
             extended: true, // pass any kind of data.
         }));
     }
+    allowCors() {
+        this.app.use(cors());
+    }
     setRoutes() {
+        this.app.use('src/uploads', express.static('src/uploads'));
         this.app.use("/api/user/", UserRouter_1.default);
+        this.app.use("/api/banner/", BannerRouter_1.default);
     }
     error404Handler() {
         this.app.use((req, res) => {

@@ -5,6 +5,7 @@ export declare class Server {
     setConfigs(): void;
     connectMongoDB(): void;
     configureBodyParser(): void;
+    allowCors(): void;
     setRoutes(): void;
     error404Handler(): void;
     handlerErrors(): void;

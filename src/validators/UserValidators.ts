@@ -5,7 +5,8 @@ import bodyParser = require("body-parser");
 export class UserValidators {
   static signup() {
     return [
-      body("email", "Email is required").isEmail()
+      body("email", "Email is required")
+        .isEmail()
         .custom((email, { req }) => {
           return User.findOne({
             email: email, // type: 'user'
@@ -161,6 +162,8 @@ export class UserValidators {
       body("email", "Email is required")
         .isEmail()
         .custom((email, { req }) => {
+          console.log(req.user.email);
+          // if(req.user.email == email) throw('Please provide a new unique Email Address to update the User Profile')
           return User.findOne({
             email: email,
           })
