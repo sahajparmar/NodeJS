@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { GlobalMiddleware } from "../middlewares/Globalmiddleware";
-import { BannerController } from "../controllers/BannerController";
-import { BannerValidators } from "../validators/BannerValidatos";
-import { Utils } from "../utils/Utils";
+import { CityController } from "../controllers/CityController";
+import { CityValidators } from "../validators/CityValidator";
 
-class BannerRouter {
+
+
+class CityRouter {
 
   public router: Router;
 
@@ -18,21 +19,17 @@ class BannerRouter {
   }
   getRoutes() {
     this.router.get(
-        "/banners",
-        GlobalMiddleware.auth,
-        BannerController.getBanners
+        "/cities",
+        CityController.getCities
       );
   }
 
   postRoutes() {
     this.router.post(
         '/create',
-        GlobalMiddleware.auth,
-        GlobalMiddleware.adminRole,
-        new Utils().multer.single('banner'),
-        BannerValidators.addBanner(),
+       CityValidators.addCity(),
         GlobalMiddleware.checkError,
-        BannerController.addBanner
+        CityController.addCity
       );
   }
 
@@ -41,6 +38,6 @@ class BannerRouter {
   putRoutes() {}
 
   deleteRoutes() {}
-}
+} 
 
-export default new BannerRouter().router;
+export default new CityRouter().router;

@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Jwt = void 0;
-const environments_1 = require("../environments/environments");
+const environment_1 = require("../environments/environment");
 const jwt = require("jsonwebtoken");
 class Jwt {
     static jwtSign(payload, expires_in = "180d") {
-        return jwt.sign(payload, (0, environments_1.getEnvironmentVariables)().jwt_secret_key, {
+        return jwt.sign(payload, (0, environment_1.getEnvironmentVariables)().jwt_secret_key, {
             expiresIn: expires_in, issuer: 'technyks.com'
         });
     }
     static jwtVerify(token) {
         return new Promise((resolve, reject) => {
-            jwt.verify(token, (0, environments_1.getEnvironmentVariables)().jwt_secret_key, (err, decoded) => {
+            jwt.verify(token, (0, environment_1.getEnvironmentVariables)().jwt_secret_key, (err, decoded) => {
                 if (err)
                     reject(err);
                 else if (!decoded)

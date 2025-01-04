@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
 const express = require("express");
 const mongoose = require("mongoose");
-const environments_1 = require("./environments/environments");
+const environment_1 = require("./environments/environment");
 const UserRouter_1 = require("./routers/UserRouter");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -23,7 +23,7 @@ class Server {
         this.configureBodyParser();
     }
     connectMongoDB() {
-        mongoose.connect((0, environments_1.getEnvironmentVariables)().db_uri).then(() => {
+        mongoose.connect((0, environment_1.getEnvironmentVariables)().db_uri).then(() => {
             console.log("Connected to mongodb.");
         });
     }

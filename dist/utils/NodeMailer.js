@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NodeMailer = void 0;
 const nodeMailer = require("nodemailer");
 const dotenv = require("dotenv");
-const environments_1 = require("../environments/environments");
+const environment_1 = require("../environments/environment");
 // Load environment variables from .env file
 dotenv.config();
 class NodeMailer {
@@ -20,15 +20,15 @@ class NodeMailer {
         return nodeMailer.createTransport({
             service: "mailtrap",
             auth: {
-                user: (0, environments_1.getEnvironmentVariables)().mail_auth.user,
-                pass: (0, environments_1.getEnvironmentVariables)().mail_auth.pass,
+                user: (0, environment_1.getEnvironmentVariables)().mail_auth.user,
+                pass: (0, environment_1.getEnvironmentVariables)().mail_auth.pass,
             },
         });
     }
     static sendMail(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const mailOptions = {
-                from: (0, environments_1.getEnvironmentVariables)().testMail.email_from,
+                from: (0, environment_1.getEnvironmentVariables)().testMail.email_from,
                 to: data.to.join(", "),
                 subject: data.subject,
                 html: data.html,

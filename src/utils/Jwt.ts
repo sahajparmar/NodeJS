@@ -1,9 +1,9 @@
-import { getEnvironmentVariables } from "../environments/environments";
+import { getEnvironmentVariables } from "../environments/environment";
 import * as jwt from "jsonwebtoken";
 
 export class Jwt {
 
- static jwtSign(payload, expires_in: string = "180d") {
+ static jwtSign(payload: object, expires_in: string = "180d") {
     return jwt.sign(payload, getEnvironmentVariables().jwt_secret_key, {
       expiresIn: expires_in, issuer: 'technyks.com'
     });
