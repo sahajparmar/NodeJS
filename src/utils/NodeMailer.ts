@@ -1,6 +1,6 @@
 import * as nodeMailer from "nodemailer";
 import * as dotenv from "dotenv";
-import { getEnvironmentVariables } from "../environments/environment";
+import { getEnvironmentVariables} from "../environments/environment"
 // Load environment variables from .env file
 dotenv.config();
 export class NodeMailer {

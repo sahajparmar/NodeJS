@@ -16,7 +16,7 @@ export class CityController {
             lat,
             lng,
             status
-        }
+        };
         const city = await new City(data).save();
         res.send(city);
         }catch(e) {

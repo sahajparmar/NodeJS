@@ -27,15 +27,30 @@ export class RestaurantValidators {
       body("phone", "Phone number is required").isString(), 
       body("password", "Password is required")
       .isAlphanumeric()
-      .isLength({ min: 8, max: 25 }),
+      .isLength({ min: 8, max: 25 })
+      .withMessage('Password must be between 8-20 characters'),
+
+      body('cover','Banner image is required')
+      .custom((cover, {req}) => {
+        if(req.file) {
+        return true;
+        }else{
+          // throw new Error('File not uploaded');
+          throw('File not uploaded');
+        }
+      }),
 
       body("res_name", "Restaurant Name is required").isString(),
       body("short_name", "Restaurant Short Name is required").isString(),
       body("openTime", "Opening time is required").isString(),
       body("closeTime", "Closing time is required").isString(),
-      body("price", "Price is required").isNumeric(),
-      body("delivery_time", "Delivery time is required").isNumeric(),
-      body("status", "Status is required").isString()
+      body("price", "Price is required").isString(),
+      body("delivery_time", "Delivery time is required").isString(),
+      body("status", "Status is required").isString(),
+      body("address", "Adderss is required").isString(),
+      body("location", "Location is required").isString(),
+      body("cuisines", "Cuisines is required").isString(),
+      body("city_id", "City is required").isString(),
 
 
     ];

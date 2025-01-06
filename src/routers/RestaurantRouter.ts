@@ -2,6 +2,7 @@ import { Router } from "express";
 import { GlobalMiddleware } from "../middlewares/Globalmiddleware";
 import { RestaurantController } from "../controllers/RestaurantController";
 import { RestaurantValidators } from "../validators/RestaurantValidator";
+import { Utils } from "../utils/Utils";
 
 class CityRouter {
   public router: Router;
@@ -17,7 +18,7 @@ class CityRouter {
   getRoutes() {
     this.router.get(
       "/restaurants",
-      GlobalMiddleware.auth,
+      GlobalMiddleware.auth,GlobalMiddleware.adminRole,
       RestaurantController.getRestaurants
     );
   }
@@ -26,7 +27,8 @@ class CityRouter {
     this.router.post(
       "/create",
       GlobalMiddleware.auth,
-      GlobalMiddleware.adminRole,
+      GlobalMiddleware.adminRole, 
+      new Utils().multer.single('cover'),
       RestaurantValidators.addRestaurant,
       GlobalMiddleware.checkError,
       RestaurantController.addRestaurant
