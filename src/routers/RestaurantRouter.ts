@@ -17,12 +17,19 @@ class CityRouter {
   }
   getRoutes() {
     this.router.get(
-      "/neabyRestaurantsAndBanners",
+      "/nearbyRestaurants",
       GlobalMiddleware.auth, 
       RestaurantValidators.getNearbyRestaurants(),
       GlobalMiddleware.checkError,
-      GlobalMiddleware.adminRole,
-      RestaurantController.getNearbyRestaurantsAndBanners
+      RestaurantController.getNearbyRestaurants
+    );
+
+    this.router.get(
+      "/searchNearbyRestaurants",
+      GlobalMiddleware.auth, 
+      RestaurantValidators.searchNearbyRestaurants(),
+      GlobalMiddleware.checkError,
+      RestaurantController.searchNearbyRestaurants
     );
   }
 
