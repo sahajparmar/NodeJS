@@ -9,4 +9,4 @@ const bannerSchema = new mongoose.Schema({
   updated_at: { type: Date, required: true, default: new Date() },
 });
 
-export default model("banner", bannerSchema);
+export default model("banners", bannerSchema);

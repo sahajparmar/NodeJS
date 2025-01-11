@@ -1,10 +1,9 @@
 import City from "../models/City";
-import Banner from "../models/City";
 
 export class CityController {
 
     static async addCity(req, res, next){ 
-        const name = req.body.path;
+        const name = req.body.name;
         const lat = req.body.lat;
         const lng = req.body.lng;
         const status = req.body.status;

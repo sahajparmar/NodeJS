@@ -30,7 +30,7 @@ export class RestaurantValidators {
       .isLength({ min: 8, max: 25 })
       .withMessage('Password must be between 8-20 characters'),
 
-      body('cover','Banner image is required')
+      body('restaurantImages','Cover image is required')
       .custom((cover, {req}) => {
         if(req.file) {
         return true;
@@ -55,4 +55,5 @@ export class RestaurantValidators {
 
     ];
   }
+  static getNearbyRestaurants
 }
